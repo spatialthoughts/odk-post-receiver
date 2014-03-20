@@ -44,16 +44,24 @@ class WipeData(webapp2.RequestHandler):
     post_keys = post_query.fetch(keys_only=True)
     ndb.delete_multi(post_keys)
 
-
-class MainPage(webapp2.RequestHandler):
-  """Main handler that receivers the POST request and also displays them."""
+class GetData(webapp2.RequestHandler):
+  """Handler to fetch the POST data from datastore."""
 
   def get(self):
     post_query = PostMessage.query().order(-PostMessage.timestamp)
     posts = post_query.fetch(100)
 
-    template = JINJA_ENVIRONMENT.get_template('index.html')
+    template = JINJA_ENVIRONMENT.get_template('datatable.html')
     template_values = {'posts': posts}
+    self.response.write(template.render(template_values))
+
+    
+class MainPage(webapp2.RequestHandler):
+  """Main handler that receivers the POST request and also displays them."""
+
+  def get(self):
+    template = JINJA_ENVIRONMENT.get_template('index.html')
+    template_values = {}
     self.response.write(template.render(template_values))
 
   def post(self):
@@ -61,10 +69,10 @@ class MainPage(webapp2.RequestHandler):
     post = PostMessage()
     post.content = content
     post.put()
-    self.redirect('/')
 
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
+    ('/getdata', GetData),
     ('/wipedata', WipeData),
-], debug=True)
+], debug=False)

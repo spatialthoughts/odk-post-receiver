@@ -2,17 +2,37 @@
 {% autoescape true %}
 <html>
   <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ODK  Post Receiver</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ODK  Post Receiver</title>
 
-   <!-- Bootstrap -->
-  <link href="static/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap theme -->
-  <link href="static/css/bootstrap-theme.min.css" rel="stylesheet">
-   <!-- Custom styles for this template -->
-  <link href="static/css/sticky-footer.css" rel="stylesheet">
+     <!-- Bootstrap -->
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="static/css/bootstrap-theme.min.css" rel="stylesheet">
+     <!-- Custom styles for this template -->
+    <link href="static/css/sticky-footer.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+
+    <script>
+    $(function() {
+      function updateTable() {
+        xhr = $.ajax({
+            type: "GET",
+            url: "/getdata",
+            success: function(tabledata) {
+                $("#datatable").html(tabledata);
+           }
+        });
+      }
+      updateTable();
+      // This will call /getdata every 30 seconds to fetch new data.
+      setInterval(updateTable, 30000);
+    });
+    </script>
   </head>
 
   <body role="document">
@@ -36,23 +56,7 @@
       <p>All POSTs are deleted automatically within 1 hour</p>
     </div>
 
-    {% if posts %}
-    <table class="table table-striped table-bordered table-condensed">
-    <caption class="text-left">JSON Posts Received</caption> 
-      <tr>
-      <th>Received at</th>
-      <th>Content body</th>
-      </tr>
-      {% for post in posts %}
-       <tr>
-        <td>{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }} UTC</td>
-        <td>{{ post.content }}</td>
-       </tr>
-      {% endfor %}
-    </table>
-    {% else %}
-    <p class="lead">No posts.</p>
-    {% endif %}
+    <div id="datatable"></div>
 
   </div>
 
@@ -63,10 +67,6 @@
         <a href="http://spatialthoughts.com">spatialthoughts.com</a>
       </p>
   </div>
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="static/js/bootstrap.min.js"></script>
   </div>
   </body>
 </html>

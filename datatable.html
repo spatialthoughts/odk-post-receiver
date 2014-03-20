@@ -1,0 +1,19 @@
+{% autoescape true %}
+{% if posts %}
+    <table class="table table-striped table-bordered table-condensed">
+    <caption class="text-left">JSON Posts Received</caption> 
+      <tr>
+      <th>Received at</th>
+      <th>Content body</th>
+      </tr>
+      {% for post in posts %}
+       <tr>
+        <td>{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }} UTC</td>
+        <td>{{ post.content }}</td>
+       </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p class="lead">No posts.</p>
+{% endif %}
+{% endautoescape %}
