@@ -1,0 +1,4 @@
+cron:
+- description: periodic datastore wipe
+  url: /wipedata
+  schedule: every 30 minutes
