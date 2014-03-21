@@ -29,7 +29,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class PostMessage(ndb.Model):
   """NDB model to temporarily store the POST request."""
-  content = ndb.StringProperty()
+  content = ndb.TextProperty()
   timestamp = ndb.DateTimeProperty(auto_now_add=True)
 
 
